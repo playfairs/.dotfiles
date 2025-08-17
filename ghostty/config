@@ -1,0 +1,9 @@
+theme = rose-pine
+background-opacity = 0.8
+background-blur = true
+font-size = 9
+window-save-state = always
+
+window-width = 1000
+window-height = 1000
+
