@@ -1,0 +1,42 @@
+# background #191724
+# background #000000
+# foreground #e0def4
+background_opacity 0.9
+background_blur 2
+font_size 9
+#
+include rose-pine.conf
+
+# background_image /Users/playfairs/Downloads/vastolorde.jpg
+# background_image_layout scaled
+# background_image_opacity 1
+# color0   #1f1d2e
+# color1   #eb6f92
+# color2   #ffc6ed
+# color3   #f6c177
+# color4   #c4a7e7
+# color5   #ea9a97
+# color6   #31748f
+# color7   #e0def4
+# color8   #6e6a86
+# color9   #eb6f92
+# color10  #FFB6C1
+# color11  #f6c177
+# color12  #c4a7e7
+# color13  #ea9a97
+# color14  #31748f
+# color15  #e0def4
+# color16  #f6c177
+# color17  #c4a7e7
+# color18  #26233a
+# color19  #908caa
+# color20  #6e6a86
+# color21  #191724
+
+enable_audio_bell no
+
+
+# BEGIN_KITTY_THEME
+# pink lavender
+include current-theme.conf
+# END_KITTY_THEME
