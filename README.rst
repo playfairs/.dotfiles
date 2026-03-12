@@ -1,2 +1,1 @@
-These dotfiles are managed by my [Nix Flake](https://github.com/playfairs/nix).
-----------------------------------------------------------------------
+These dotfiles *should be* managed by my [Nix Flake](https://github.com/playfairs/nix), if they are not, just look at my nix congifs or if you use nix, just use my flake.
