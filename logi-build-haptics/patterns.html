@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZshDev Plugin Settings</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171b22;
+      --text: #e6e7eb;
+      --muted: #a1a7b3;
+      --accent: #5ad0a0;
+      --danger: #ff6b6b;
+      --line: #2a2f3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", "Space Grotesk", "Segoe UI", sans-serif;
+      background: radial-gradient(1200px 600px at 10% -10%, #1f2430 0%, transparent 60%), var(--bg);
+      color: var(--text);
+    }
+    header {
+      padding: 24px 28px 12px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+    }
+    p { margin: 0; color: var(--muted); }
+    main { padding: 16px 28px 28px; }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .card p {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .notice {
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .settings {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .field label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .field input[type="number"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0f1218;
+      color: var(--text);
+    }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 20px;
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    button {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--accent);
+      color: #0b1511;
+      border-color: transparent;
+      font-weight: 600;
+    }
+    button.danger { color: var(--danger); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+    }
+    th { text-align: left; font-weight: 600; color: var(--muted); }
+    tr:last-child td { border-bottom: none; }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0f1218;
+      color: var(--text);
+    }
+    .status { margin-top: 10px; color: var(--muted); }
+    .status.error { color: var(--danger); }
+    .status.ok { color: var(--accent); }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #232833;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media (max-width: 860px) {
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tr { border-bottom: 1px solid var(--line); }
+      td { border-bottom: none; }
+      td[data-label]::before {
+        content: attr(data-label);
+        display: block;
+        color: var(--muted);
+        margin-bottom: 4px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ZshDev Plugin Settings</h1>
+    <p>Enable, disable, and add regex patterns that trigger haptics.</p>
+  </header>
+  <main>
+    <div class="toolbar">
+      <button id="add">Add Pattern</button>
+      <button id="reload">Reload</button>
+      <button id="save" class="primary">Save</button>
+      <span class="status" id="status"></span>
+    </div>
+    <div class="grid">
+      <section class="card">
+        <h2>Resource Monitor</h2>
+        <p>Configure CPU and RAM warnings shown in terminal and mapped haptics.</p>
+        <div class="settings">
+          <div class="field check">
+            <input id="cpuEnabled" type="checkbox" checked />
+            <label for="cpuEnabled">Enable CPU monitoring</label>
+          </div>
+          <div class="field check">
+            <input id="ramEnabled" type="checkbox" checked />
+            <label for="ramEnabled">Enable RAM monitoring</label>
+          </div>
+
+          <div class="field">
+            <label for="cpuThresholdPercent">CPU threshold (%)</label>
+            <input id="cpuThresholdPercent" type="number" min="1" max="100" step="1" />
+            <div class="hint">Recommended: 90%</div>
+          </div>
+          <div class="field">
+            <label for="ramThresholdPercent">RAM threshold (%)</label>
+            <input id="ramThresholdPercent" type="number" min="1" max="100" step="1" />
+            <div class="hint">Recommended: 90%</div>
+          </div>
+
+          <div class="field">
+            <label for="intervalSeconds">Check interval (seconds)</label>
+            <input id="intervalSeconds" type="number" min="0.1" max="10" step="0.1" />
+            <div class="hint">Recommended: 0.5s for testing, 2.0s for normal use</div>
+          </div>
+          <div class="field">
+            <label for="warnCooldownSeconds">Warning cooldown (seconds)</label>
+            <input id="warnCooldownSeconds" type="number" min="1" max="600" step="1" />
+            <div class="hint">Recommended: 30s</div>
+          </div>
+        </div>
+        <div class="notice">
+          After plugin install/update or after saving settings, open a new terminal window (or reload your shell) so updated integration values are picked up.
+        </div>
+      </section>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:80px;">Enabled</th>
+          <th style="width:220px;">Label</th>
+          <th>Regex</th>
+          <th style="width:110px;">Kind</th>
+          <th style="width:90px;">Remove</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </main>
+
+  <script>
+    const PATTERNS_API = "http://127.0.0.1:43821/patterns";
+    const SETTINGS_API = "http://127.0.0.1:43821/settings";
+    const rowsEl = document.getElementById("rows");
+    const statusEl = document.getElementById("status");
+
+    function setStatus(text, kind) {
+      statusEl.textContent = text || "";
+      statusEl.className = "status" + (kind ? " " + kind : "");
+    }
+
+    function makeRow(item) {
+      const tr = document.createElement("tr");
+      tr.dataset.id = item.id || "";
+      tr.dataset.builtin = item.builtin ? "1" : "0";
+
+      tr.innerHTML = `
+        <td data-label="Enabled"><input type="checkbox" ${item.enabled ? "checked" : ""}></td>
+        <td data-label="Label"><input type="text" value="${escapeHtml(item.label || "")}" placeholder="e.g. dotnet build"></td>
+        <td data-label="Regex"><input type="text" value="${escapeHtml(item.regex || "")}" placeholder="^dotnet build"></td>
+        <td data-label="Kind"><span class="pill">${item.builtin ? "builtin" : "custom"}</span></td>
+        <td data-label="Remove"><button class="danger">Remove</button></td>
+      `;
+
+      tr.querySelector("button").addEventListener("click", () => tr.remove());
+      return tr;
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function readRows() {
+      const items = [];
+      const trs = rowsEl.querySelectorAll("tr");
+      trs.forEach(tr => {
+        const inputs = tr.querySelectorAll("input");
+        const enabled = inputs[0].checked;
+        const label = inputs[1].value.trim();
+        const regex = inputs[2].value.trim();
+        const builtin = tr.dataset.builtin === "1";
+        const id = tr.dataset.id || "";
+        items.push({ id, label, regex, enabled, builtin });
+      });
+      return items;
+    }
+
+    function validate(items) {
+      for (let i = 0; i < items.length; i++) {
+        const it = items[i];
+        if (!it.regex) {
+          return `Row ${i + 1}: regex is required`;
+        }
+        try {
+          new RegExp(it.regex);
+        } catch (e) {
+          return `Row ${i + 1}: invalid regex (${e.message})`;
+        }
+      }
+      return null;
+    }
+
+    function readSettings() {
+      return {
+        cpuEnabled: document.getElementById("cpuEnabled").checked,
+        ramEnabled: document.getElementById("ramEnabled").checked,
+        cpuThresholdPercent: Number(document.getElementById("cpuThresholdPercent").value),
+        ramThresholdPercent: Number(document.getElementById("ramThresholdPercent").value),
+        intervalSeconds: Number(document.getElementById("intervalSeconds").value),
+        warnCooldownSeconds: Number(document.getElementById("warnCooldownSeconds").value),
+      };
+    }
+
+    function applySettings(s) {
+      document.getElementById("cpuEnabled").checked = !!s.cpuEnabled;
+      document.getElementById("ramEnabled").checked = !!s.ramEnabled;
+      document.getElementById("cpuThresholdPercent").value = Number(s.cpuThresholdPercent ?? 90);
+      document.getElementById("ramThresholdPercent").value = Number(s.ramThresholdPercent ?? 90);
+      document.getElementById("intervalSeconds").value = Number(s.intervalSeconds ?? 0.5);
+      document.getElementById("warnCooldownSeconds").value = Number(s.warnCooldownSeconds ?? 30);
+    }
+
+    function validateSettings(s) {
+      if (!(s.cpuThresholdPercent >= 1 && s.cpuThresholdPercent <= 100)) {
+        return "CPU threshold must be between 1 and 100";
+      }
+      if (!(s.ramThresholdPercent >= 1 && s.ramThresholdPercent <= 100)) {
+        return "RAM threshold must be between 1 and 100";
+      }
+      if (!(s.intervalSeconds >= 0.1 && s.intervalSeconds <= 10)) {
+        return "Check interval must be between 0.1 and 10 seconds";
+      }
+      if (!(s.warnCooldownSeconds >= 1 && s.warnCooldownSeconds <= 600)) {
+        return "Warning cooldown must be between 1 and 600 seconds";
+      }
+      return null;
+    }
+
+    async function load() {
+      setStatus("Loading...");
+      const [patternsRes, settingsRes] = await Promise.all([
+        fetch(PATTERNS_API),
+        fetch(SETTINGS_API),
+      ]);
+
+      if (!patternsRes.ok || !settingsRes.ok) {
+        throw new Error("Failed to load settings");
+      }
+
+      const data = await patternsRes.json();
+      const settings = await settingsRes.json();
+      rowsEl.innerHTML = "";
+      (data.patterns || []).forEach(p => rowsEl.appendChild(makeRow(p)));
+      applySettings(settings);
+      setStatus("Loaded", "ok");
+    }
+
+    async function save() {
+      const items = readRows();
+      const err = validate(items);
+      if (err) {
+        setStatus(err, "error");
+        return;
+      }
+      const settings = readSettings();
+      const settingsErr = validateSettings(settings);
+      if (settingsErr) {
+        setStatus(settingsErr, "error");
+        return;
+      }
+
+      setStatus("Saving...");
+      const patternsRes = await fetch(PATTERNS_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ patterns: items })
+      });
+
+      if (!patternsRes.ok) {
+        const payload = await patternsRes.json().catch(() => ({}));
+        if (payload.errors && payload.errors.length) {
+          setStatus(payload.errors[0], "error");
+        } else {
+          setStatus("Save failed", "error");
+        }
+        return;
+      }
+
+      const settingsRes = await fetch(SETTINGS_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings)
+      });
+
+      if (!settingsRes.ok) {
+        const payload = await settingsRes.json().catch(() => ({}));
+        if (payload.errors && payload.errors.length) {
+          setStatus(payload.errors[0], "error");
+        } else {
+          setStatus("Settings save failed", "error");
+        }
+        return;
+      }
+
+      setStatus("Saved. Open a new terminal window to apply shell changes.", "ok");
+      await load();
+    }
+
+    document.getElementById("add").addEventListener("click", () => {
+      rowsEl.appendChild(makeRow({ id: "", label: "", regex: "", enabled: true, builtin: false }));
+      setStatus("", "");
+    });
+    document.getElementById("reload").addEventListener("click", load);
+    document.getElementById("save").addEventListener("click", save);
+
+    load().catch(err => setStatus(String(err), "error"));
+  </script>
+</body>
+</html>

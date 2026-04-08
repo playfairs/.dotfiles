@@ -1,0 +1,32 @@
+{
+  "patterns": [
+    {
+      "id": "colcon",
+      "label": "colcon build",
+      "regex": "^colcon build",
+      "enabled": true,
+      "builtin": true
+    },
+    {
+      "id": "cmake",
+      "label": "cmake --build",
+      "regex": "^cmake --build",
+      "enabled": true,
+      "builtin": true
+    },
+    {
+      "id": "dotnet",
+      "label": "dotnet build",
+      "regex": "^dotnet build",
+      "enabled": true,
+      "builtin": true
+    },
+    {
+      "id": "make",
+      "label": "make",
+      "regex": "^make",
+      "enabled": false,
+      "builtin": true
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "cpuEnabled": true,
+  "ramEnabled": true,
+  "cpuThresholdPercent": 90,
+  "ramThresholdPercent": 90,
+  "intervalSeconds": 0.5,
+  "warnCooldownSeconds": 30
+}
