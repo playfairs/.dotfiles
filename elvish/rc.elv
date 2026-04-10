@@ -1,1 +1,1 @@
-/nix/store/ffv1cm1hx3qk9lbjc8qxrqqsr86gc4bk-home-manager-files/.config/elvish/rc.elv
+/nix/store/10yaazgj93vcax4z6rn4jkf10l34a0fd-home-manager-files/.config/elvish/rc.elv
