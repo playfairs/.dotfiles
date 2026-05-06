@@ -1,0 +1,19 @@
+Started at: 4/24/26 15:41
+
+/Users/playfairs/Downloads/asteride.png 1024x1024x32 : loaded
+/Users/playfairs/Downloads/asteride_result.png : saved
+		715.42 KiB -> 571.73 KiB (-20%)
+
+
+Input files: 1
+Extracted pages: 1
+New files: 1
+
+Total input file size: 715.42 KiB
+Total output file size: 571.73 KiB
+File size ratio: -20%
+
+Total Duration: 1 second(s)
+
+Finished at: 4/24/26 15:41
+
